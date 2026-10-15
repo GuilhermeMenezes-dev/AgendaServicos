@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Usuários</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/app.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{fragments :: navbar}"></div>
+<div class="container mt-4">
+<h1 class="mb-4" th:text="${usuario.id == null ? 'Novo usuário' : 'Editar usuário'}"></h1>
+    <div th:replace="~{fragments :: alertas}"></div>
+    <form th:action="@{/usuarios}" th:object="${usuario}" method="post">
+        <input type="hidden" th:field="*{id}">
+        <div class="mb-3">
+            <label class="form-label">Usuário (login)</label>
+            <input type="text" class="form-control" th:field="*{usuario}">
+            <div class="text-danger small" th:if="${#fields.hasErrors('usuario')}" th:errors="*{usuario}"></div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Senha</label>
+            <input type="password" class="form-control" th:field="*{senha}">
+            <div class="text-danger small" th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}"></div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Tipo de acesso</label>
+            <select class="form-select" name="tipoAcesso">
+                <option value="">Selecione</option>
+                <option th:each="o : ${tiposAcesso}" th:value="${o.id}" th:text="${o.descricao}"
+                        th:selected="${usuario.tipoAcesso != null and usuario.tipoAcesso.id == o.id}"></option>
+            </select>
+            <div class="text-danger small" th:if="${#fields.hasErrors('tipoAcesso')}" th:errors="*{tipoAcesso}"></div>
+        </div>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a th:href="@{/usuarios}" class="btn btn-secondary">Voltar</a>
+    </form>
+</div>
+</body>
+</html>

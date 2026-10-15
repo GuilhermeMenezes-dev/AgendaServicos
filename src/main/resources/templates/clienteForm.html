@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Clientes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/app.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{fragments :: navbar}"></div>
+<div class="container mt-4">
+<h1 class="mb-4" th:text="${cliente.id == null ? 'Novo cliente' : 'Editar cliente'}"></h1>
+    <div th:replace="~{fragments :: alertas}"></div>
+    <form th:action="@{/clientes}" th:object="${cliente}" method="post">
+        <input type="hidden" th:field="*{id}">
+        <div class="mb-3">
+            <label class="form-label">Nome</label>
+            <input type="text" class="form-control" th:field="*{nome}">
+            <div class="text-danger small" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Telefone</label>
+            <input type="text" class="form-control" th:field="*{telefone}">
+            <div class="text-danger small" th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}"></div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">E-mail</label>
+            <input type="email" class="form-control" th:field="*{email}">
+            <div class="text-danger small" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Endereço</label>
+            <select class="form-select" name="endereco">
+                <option value="">Selecione</option>
+                <option th:each="o : ${enderecos}" th:value="${o.id}" th:text="${o.logradouro + ', ' + o.numero + ' - ' + o.cidade}"
+                        th:selected="${cliente.endereco != null and cliente.endereco.id == o.id}"></option>
+            </select>
+            <div class="text-danger small" th:if="${#fields.hasErrors('endereco')}" th:errors="*{endereco}"></div>
+        </div>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a th:href="@{/clientes}" class="btn btn-secondary">Voltar</a>
+    </form>
+</div>
+</body>
+</html>
